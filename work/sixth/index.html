@@ -22,31 +22,34 @@
     $('#pokemon_search').on('click', showPokemon);
     $('#wrapper').on('click', '#catch', getPokemon);
     $('#wrapper').on('click', '[data-js="reset"]', reset);
+
     function showPokemon() {
       let encountHtml =
         `
         <div class="encount">
-    <p class="name"></p>
-    <div>
-      <img class="img" src="" alt="">
-    </div>
-    <div>
-      <button class="btn" id="catch">捕まえる</button>
-      <button class="btn" data-js="reset">逃げる</button>
-    </div>
-    </div>
-  `;
+          <p class="name"></p>
+          <div>
+            <img class="img" src="" alt="">
+          </div>
+          <div>
+            <button class="btn" id="catch">捕まえる</button>
+            <button class="btn" data-js="reset">逃げる</button>
+          </div>
+        </div>
+        `;
       $('#wrapper').prepend(encountHtml);
 
+      const pokemonId = Math.floor(Math.random() * 151) + 1;
+
       $.ajax({
-        url: 'https://pokeapi.co/api/v2/pokemon-species/1/',
+        url: `https://pokeapi.co/api/v2/pokemon-species/${pokemonId}/`,
         method: 'GET'
       }).done(function (res) {
         const pokeName = res.names.find(n => n.language.name === 'ja-Hrkt').name;
         $('.name').text(pokeName);
       })
       $.ajax({
-        url: 'https://pokeapi.co/api/v2/pokemon/1',
+        url: `https://pokeapi.co/api/v2/pokemon/${pokemonId}/`,
         method: 'GET'
       }).done(function (res) {
         const pokeImg = res.sprites.front_default;
@@ -62,32 +65,32 @@
       let doneHtml =
         `
         <div class="get-pokemon">
-    <p class="name">ゲットしました</p>
-    <div>
-      <img class="img" src="" alt="">
-    </div>
-    <button class="btn" data-js="reset">戻る</button>
-    </div>
-    `
+          <p class="name">ゲットしました</p>
+          <div>
+            <img class="img" src="" alt="">
+          </div>
+          <button class="btn" data-js="reset">戻る</button>
+        </div>
+      `;
       let failHtml =
         `
         <div class = "fail-pokemon">
-    <p class="text">逃げられてしまった...</p>
-    <button class="btn mt" data-js="reset">戻る</button>
-    </div>
-  `
-      var r = Math.floor(Math.random() * 2);
+          <p class="text">逃げられてしまった...</p>
+          <button class="btn mt" data-js="reset">戻る</button>
+        </div>
+        `;
+      const r = Math.floor(Math.random() * 2);
 
       if (r === 0) {
         $('#wrapper').prepend(doneHtml);
         $.ajax({
-        url: 'https://pokeapi.co/api/v2/item/4',
-        method: 'GET'
-      }).done(function (res) {
-        console.log(res);
-         const capsuleImg = res.sprites.default;
-        $('.img').attr('src', capsuleImg);
-      })
+          url: 'https://pokeapi.co/api/v2/item/4',
+          method: 'GET'
+        }).done(function (res) {
+          console.log(res);
+          const capsuleImg = res.sprites.default;
+          $('.img').attr('src', capsuleImg);
+        })
       } else {
         $('#wrapper').prepend(failHtml);
       }
@@ -96,14 +99,10 @@
 
     };
 
-
-    function reset(){
-       $('.get-pokemon').hide();
-       $('.fail-pokemon').hide();
-       $('.search-btn').show();
+    function reset() {
+      $('.encount, .get-pokemon, .fail-pokemon').hide();
+      $('.search-btn').show();
     }
-
-
   </script>
 </body>
 
