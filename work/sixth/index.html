@@ -19,25 +19,23 @@
   <script>
     // 回答はここに書いてね
 
-    $('#pokemon_search').on('click', showPokemon);
+    $('#wrapper').on('click', '#pokemon_search', showPokemon);
     $('#wrapper').on('click', '#catch', getPokemon);
     $('#wrapper').on('click', '[data-js="reset"]', reset);
 
     function showPokemon() {
       let encountHtml =
         `
-        <div class="encount">
-          <p class="name"></p>
-          <div>
-            <img class="img" src="" alt="">
-          </div>
-          <div>
-            <button class="btn" id="catch">捕まえる</button>
-            <button class="btn" data-js="reset">逃げる</button>
-          </div>
+        <p class="name"></p>
+        <div>
+          <img class="img" src="" alt="">
+        </div>
+        <div>
+          <button class="btn" id="catch">捕まえる</button>
+          <button class="btn" data-js="reset">逃げる</button>
         </div>
         `;
-      $('#wrapper').prepend(encountHtml);
+      $('#wrapper').html(encountHtml);
 
       const pokemonId = Math.floor(Math.random() * 151) + 1;
 
@@ -64,25 +62,21 @@
 
       let doneHtml =
         `
-        <div class="get-pokemon">
-          <p class="name">ゲットしました</p>
-          <div>
-            <img class="img" src="" alt="">
-          </div>
-          <button class="btn" data-js="reset">戻る</button>
+        <p class="name">ゲットしました</p>
+        <div>
+          <img class="img" src="" alt="">
         </div>
+        <button class="btn" data-js="reset">戻る</button>        
       `;
       let failHtml =
         `
-        <div class = "fail-pokemon">
-          <p class="text">逃げられてしまった...</p>
-          <button class="btn mt" data-js="reset">戻る</button>
-        </div>
+        <p class="text">逃げられてしまった...</p>
+        <button class="btn mt" data-js="reset">戻る</button>
         `;
-      const r = Math.floor(Math.random() * 2);
+      const fiftyFifty = Math.floor(Math.random() * 2);
 
-      if (r === 0) {
-        $('#wrapper').prepend(doneHtml);
+      if (fiftyFifty === 0) {
+        $('#wrapper').html(doneHtml);
         $.ajax({
           url: 'https://pokeapi.co/api/v2/item/4',
           method: 'GET'
@@ -92,16 +86,13 @@
           $('.img').attr('src', capsuleImg);
         })
       } else {
-        $('#wrapper').prepend(failHtml);
+        $('#wrapper').html(failHtml);
       }
-
-      $('.encount').hide();
 
     };
 
     function reset() {
-      $('.encount, .get-pokemon, .fail-pokemon').hide();
-      $('.search-btn').show();
+      $('#wrapper').html('<button type="button" class="btn search-btn" id="pokemon_search">ポケモンを探す</button>');
     }
   </script>
 </body>
