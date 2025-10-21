@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,6 +10,7 @@
   <link rel="stylesheet" href="./css/style.css">
   <title>Document</title>
 </head>
+
 <body>
   <div class="wrapper" id="wrapper">
     <button type="button" class="btn search-btn" id="pokemon_search">ポケモンを探す</button>
@@ -16,6 +18,93 @@
   <script src="../../common/js/jquery.js"></script>
   <script>
     // 回答はここに書いてね
+
+    $('#pokemon_search').on('click', showPokemon);
+    $('#wrapper').on('click', '#catch', getPokemon);
+    $('#wrapper').on('click', '[data-js="reset"]', reset);
+    function showPokemon() {
+      let encountHtml =
+        `
+        <div class="encount">
+    <p class="name"></p>
+    <div>
+      <img class="img" src="" alt="">
+    </div>
+    <div>
+      <button class="btn" id="catch">捕まえる</button>
+      <button class="btn" data-js="reset">逃げる</button>
+    </div>
+    </div>
+  `;
+      $('#wrapper').prepend(encountHtml);
+
+      $.ajax({
+        url: 'https://pokeapi.co/api/v2/pokemon-species/1/',
+        method: 'GET'
+      }).done(function (res) {
+        const pokeName = res.names.find(n => n.language.name === 'ja-Hrkt').name;
+        $('.name').text(pokeName);
+      })
+      $.ajax({
+        url: 'https://pokeapi.co/api/v2/pokemon/1',
+        method: 'GET'
+      }).done(function (res) {
+        const pokeImg = res.sprites.front_default;
+        $('.img').attr('src', pokeImg);
+      })
+
+      $('.search-btn').hide();
+
+    }
+
+    function getPokemon() {
+
+      let doneHtml =
+        `
+        <div class="get-pokemon">
+    <p class="name">ゲットしました</p>
+    <div>
+      <img class="img" src="" alt="">
+    </div>
+    <button class="btn" data-js="reset">戻る</button>
+    </div>
+    `
+      let failHtml =
+        `
+        <div class = "fail-pokemon">
+    <p class="text">逃げられてしまった...</p>
+    <button class="btn mt" data-js="reset">戻る</button>
+    </div>
+  `
+      var r = Math.floor(Math.random() * 2);
+
+      if (r === 0) {
+        $('#wrapper').prepend(doneHtml);
+        $.ajax({
+        url: 'https://pokeapi.co/api/v2/item/4',
+        method: 'GET'
+      }).done(function (res) {
+        console.log(res);
+         const capsuleImg = res.sprites.default;
+        $('.img').attr('src', capsuleImg);
+      })
+      } else {
+        $('#wrapper').prepend(failHtml);
+      }
+
+      $('.encount').hide();
+
+    };
+
+
+    function reset(){
+       $('.get-pokemon').hide();
+       $('.fail-pokemon').hide();
+       $('.search-btn').show();
+    }
+
+
   </script>
 </body>
+
 </html>
