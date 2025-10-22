@@ -53,9 +53,6 @@
         const pokeImg = res.sprites.front_default;
         $('.img').attr('src', pokeImg);
       })
-
-      $('.search-btn').hide();
-
     }
 
     function getPokemon() {
@@ -73,22 +70,20 @@
         <p class="text">逃げられてしまった...</p>
         <button class="btn mt" data-js="reset">戻る</button>
         `;
-      const fiftyFifty = Math.floor(Math.random() * 2);
+      const getFlip = Math.floor(Math.random() * 2);
 
-      if (fiftyFifty === 0) {
+      if (getFlip === 0) {
         $('#wrapper').html(doneHtml);
         $.ajax({
           url: 'https://pokeapi.co/api/v2/item/4',
           method: 'GET'
         }).done(function (res) {
-          console.log(res);
           const capsuleImg = res.sprites.default;
           $('.img').attr('src', capsuleImg);
         })
       } else {
         $('#wrapper').html(failHtml);
       }
-
     };
 
     function reset() {
